@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolo Variazioni Fiscali</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <h1>Calcolo Variazioni Fiscali</h1>
+    <form id="calcoloForm">
+        <label for="manutenzioni">Manutenzioni:</label>
+        <input type="number" id="manutenzioni" required>
+        
+        <label for="plusvalenze">Plusvalenze Crediti:</label>
+        <input type="number" id="plusvalenze" required>
+        
+        <label for="compensi">Compensi Amministratori:</label>
+        <input type="number" id="compensi" required>
+        
+        <label for="ires">Imponibile IRES:</label>
+        <input type="number" id="ires" required>
+        
+        <label for="rimanenze">Rimanenze:</label>
+        <input type="number" id="rimanenze" required>
+        
+        <button type="submit">Calcola</button>
+    </form>
+    
+    <h2>Risultati:</h2>
+    <p id="risultati"></p>
+</body>
+</html>
+
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+}
+
+/* script.js */
+document.getElementById('calcoloForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    let manutenzioni = parseFloat(document.getElementById('manutenzioni').value);
+    let plusvalenze = parseFloat(document.getElementById('plusvalenze').value);
+    let compensi = parseFloat(document.getElementById('compensi').value);
+    let imponibileIres = parseFloat(document.getElementById('ires').value);
+    let rimanenze = parseFloat(document.getElementById('rimanenze').value);
+    
+    let manutenzioneDeducibile = manutenzioni * 0.05;
+    let variazioneManutenzioni = manutenzioni - manutenzioneDeducibile;
+    let ires = imponibileIres * 0.24;
+    
+    let totaleImposte = variazioneManutenzioni + plusvalenze + compensi + ires + rimanenze;
+    
+    document.getElementById('risultati').innerText = `Totale imposte da pagare: €${totaleImposte.toFixed(2)}`;
+});
