@@ -29,7 +29,7 @@
     </form>
     
     <h2>Risultati:</h2>
-    <p id="risultati"></p>
+    <div id="risultati"></div>
 </body>
 </html>
 
@@ -61,11 +61,31 @@ document.getElementById('calcoloForm').addEventListener('submit', function(event
     let imponibileIres = parseFloat(document.getElementById('ires').value);
     let rimanenze = parseFloat(document.getElementById('rimanenze').value);
     
+    // Manutenzioni e riparazioni: deducibile al 5%, il resto da spalmare negli anni successivi
     let manutenzioneDeducibile = manutenzioni * 0.05;
     let variazioneManutenzioni = manutenzioni - manutenzioneDeducibile;
+    
+    // Plusvalenze crediti: imponibili interamente
+    let variazionePlusvalenze = plusvalenze;
+    
+    // Compensi agli amministratori: interamente deducibili solo se pagati entro il periodo d'imposta
+    let variazioneCompensi = compensi;
+    
+    // IRES al 24%
     let ires = imponibileIres * 0.24;
     
-    let totaleImposte = variazioneManutenzioni + plusvalenze + compensi + ires + rimanenze;
+    // Rimanenze: incremento valore rimanenze rispetto all'anno precedente
+    let variazioneRimanenze = rimanenze;
     
-    document.getElementById('risultati').innerText = `Totale imposte da pagare: €${totaleImposte.toFixed(2)}`;
+    // Totale variazioni fiscali
+    let totaleVariazioni = variazioneManutenzioni + variazionePlusvalenze + variazioneCompensi + ires + variazioneRimanenze;
+    
+    document.getElementById('risultati').innerHTML = `
+        <p>Manutenzioni non deducibili subito: €${variazioneManutenzioni.toFixed(2)}</p>
+        <p>Plusvalenze crediti: €${variazionePlusvalenze.toFixed(2)}</p>
+        <p>Compensi agli amministratori: €${variazioneCompensi.toFixed(2)}</p>
+        <p>IRES (24% sull'imponibile): €${ires.toFixed(2)}</p>
+        <p>Rimanenze: €${variazioneRimanenze.toFixed(2)}</p>
+        <h3>Totale imposte da pagare: €${totaleVariazioni.toFixed(2)}</h3>
+    `;
 });
